@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorant Wiki - Danh sách trang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .category-section {
+            margin-bottom: 30px;
+        }
+        .category-title {
+            background: #ff4655;
+            color: white;
+            padding: 10px 15px;
+            margin: 0 0 15px 0;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .page-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fafafa;
+            transition: transform 0.2s;
+        }
+        .page-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .page-slug {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .page-meta {
+            font-size: 12px;
+            color: #888;
+        }
+        .edit-link {
+            display: inline-block;
+            background: #ff4655;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .edit-link:hover {
+            background: #e03e4c;
+        }
+        .back-link {
+            display: inline-block;
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/dashboard.html" class="back-link">← Quay lại Dashboard</a>
+        
+        <h1>📚 Valorant Wiki - Danh sách trang</h1>
+        
+        <% 
+        const categories = {};
+        pages.forEach(page => {
+            if (!categories[page.category]) {
+                categories[page.category] = [];
+            }
+            categories[page.category].push(page);
+        });
+        %>
+        
+        <% Object.keys(categories).forEach(category => { %>
+            <div class="category-section">
+                <h2 class="category-title"><%= category %></h2>
+                <div class="page-grid">
+                    <% categories[category].forEach(page => { %>
+                        <div class="page-card">
+                            <div class="page-title">
+                                <a href="/wiki/<%= page.category %>/<%= page.slug %>" style="text-decoration: none; color: inherit;">
+                                    <%= page.title %>
+                                </a>
+                            </div>
+                            <div class="page-slug">/<%= page.category %>/<%= page.slug %></div>
+                            <div class="page-meta">
+                                Cập nhật: <%= new Date(page.updated_at).toLocaleDateString('vi-VN') %>
+                            </div>
+                            <% if (typeof user !== 'undefined' && user) { %>
+                                <a href="/wiki/edit/<%= page.page_id %>" class="edit-link">✏️ Chỉnh sửa</a>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        <% }); %>
+        
+        <% if (pages.length === 0) { %>
+            <div style="text-align: center; padding: 40px; color: #666;">
+                <h3>Chưa có trang nào trong wiki</h3>
+                <p>Hãy thêm dữ liệu vào bảng Pages để bắt đầu!</p>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Quản lý Maps</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <style>
+        #editForm {
+            display: none;
+            width: 100%;
+            border: 2px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            background: #fafafa;
+        }
+
+        #editForm input,
+        #editForm select {
+            padding: 6px;
+            margin: 5px;
+            width: 200px;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Danh sách Maps</h1>
+    
+    <button id="btnShowAdd" style="margin-bottom:10px;padding:6px 12px;cursor:pointer;">➕ Thêm Maps</button>
+    
+    <table border="1" id="MapsTable" cellspacing="0" cellpadding="8">
+        <thead style="background:#2c3e50;color:white;">
+            <tr>
+                <th>ID</th>
+                <th>Tên Maps</th>
+                <th>Role_id</th>
+                <th>Description</th>
+                <th>Image URL</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+  
+    <!-- Form sửa -->
+    <div id="editForm" style="display:none;margin-top:20px;padding:15px;border:1px solid #ccc;background:#fafafa;">
+        <h3>✏️ Sửa thông tin Maps</h3>
+        <form id="formEditMap">
+            <input type="hidden" id="edit_id">
+            <label>Tên Maps</label>
+            <input type="text" id="edit_map_name" required><br>
+            <label>Map_id</label>
+            <input type="number" id="edit_map_id" required><br>
+            <label>Description</label>
+            <input type="text" id="edit_description" required><br>
+            <label>Image URL</label>
+            <input type="text" id="edit_layout_image_url" required><br>
+            <button type="submit">💾 Lưu thay đổi</button>
+            <button type="button" onclick="closeEditForm()">❌ Hủy</button>
+        </form>
+    </div>
+  
+    <!-- Form thêm mới -->
+    <div id="addForm" style="display:none;margin-top:20px;padding:15px;border:1px solid #ccc;background:#fafafa;">
+        <h3>➕ Thêm Map Mới</h3>
+        <form id="formAddMaps">
+            <label>Tên Maps</label>
+            <input type="text" id="add_map_name" required><br>
+            <label>Role ID</label>
+            <input type="number" id="add_role_id" required><br>
+            <label>Mô tả</label>
+            <input type="text" id="add_description" required><br>
+            <label>Portrait Image URL</label>
+            <input type="text" id="add_portrait_image_url" required><br>
+            <button type="submit">✅ Thêm mới</button>
+            <button type="button" id="btnCancelAdd">❌ Hủy</button>
+        </form>
+    </div>
+  
+    <script src="js/Maps/Maps.js"></script>
+  </body>
+  
+
+</html>

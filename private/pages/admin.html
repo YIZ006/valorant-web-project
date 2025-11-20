@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quản lý Admin</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+
+    <style>
+      #editForm {
+        display: none;
+        width: 100%;
+        border: 2px solid #ccc;
+        padding: 10px;
+        margin-top: 20px;
+        background: #fafafa;
+      }
+      #editForm input, #editForm select {
+        padding: 6px;
+        margin: 5px;
+        width: 200px;
+      }
+    </style>
+  
+</head>
+<body>
+  <h1>Danh sách Admin</h1>
+  <table border="1" id="adminTable" cellspacing="0" cellpadding="8">
+    <thead style="background:#2c3e50;color:white;">
+      <tr>
+        <th>ID</th>
+        <th>Tên đăng nhập</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Quyền</th>
+        <th>Ngày tạo</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  
+  <div id="editForm" style="display:none;margin-top:20px;padding:15px;border:1px solid #ccc;background:#fafafa;">
+    <h3>Sửa thông tin Admin</h3>
+    <form id="formEditAdmin">
+      <input type="hidden" id="edit_id">
+      <label>Tên đăng nhập:</label>
+      <input type="text" id="edit_username" required><br>
+      <label>Email:</label>
+      <input type="email" id="edit_email" required><br>
+      <label>Số điện thoại:</label>
+      <input type="text" id="edit_phone" required><br>
+      <label>Quyền:</label>
+      <select id="edit_quyen" required>
+        <option value="admin">Admin</option>
+        <option value="editor">Editor</option>
+        <option value="viewer">Viewer</option>
+      </select><br>
+      <button type="submit">💾 Lưu thay đổi</button>
+      <button type="button" onclick="closeEditForm()">Hủy</button>
+    </form>
+  </div>
+  <script src="js/admin/admin.js"></script>
+</body>
+</html>

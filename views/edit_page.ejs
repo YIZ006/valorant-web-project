@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chỉnh sửa - <%= page.title %></title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .header {
+      background: #ff4655;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 2em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .content {
+      padding: 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+    textarea {
+      width: 100%;
+      min-height: 400px;
+      padding: 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    textarea:focus {
+      border-color: #ff4655;
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 70, 85, 0.2);
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    input[type="text"]:focus {
+      border-color: #ff4655;
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 70, 85, 0.2);
+    }
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: #ff4655;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #e03e4c;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    .help-text {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border-left: 4px solid #ff4655;
+    }
+    .help-text h4 {
+      margin: 0 0 10px 0;
+      color: #ff4655;
+    }
+    .help-text ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✏️ Chỉnh sửa: <%= page.title %></h1>
+    </div>
+
+    <div class="content">
+      <div class="help-text">
+        <h4>💡 Hướng dẫn chỉnh sửa:</h4>
+        <ul>
+          <li>Sử dụng HTML để định dạng nội dung</li>
+          <li><strong>&lt;h2&gt;</strong> cho tiêu đề chính</li>
+          <li><strong>&lt;h3&gt;</strong> cho tiêu đề phụ</li>
+          <li><strong>&lt;ul&gt; &lt;li&gt;</strong> cho danh sách</li>
+          <li><strong>&lt;p&gt;</strong> cho đoạn văn</li>
+        </ul>
+      </div>
+
+      <form method="POST" action="/wiki/edit/<%= page.page_id %>">
+        <div class="form-group">
+          <label for="summary">📝 Tóm tắt thay đổi:</label>
+          <input type="text" name="summary" id="summary" placeholder="Ví dụ: Thêm thông tin về chiến thuật, Cập nhật sát thương vũ khí..." />
+        </div>
+
+        <div class="form-group">
+          <label for="content">📄 Nội dung trang:</label>
+          <textarea name="content" id="content" placeholder="Nhập nội dung HTML..."><%= page.content %></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
+          <a href="/wiki/<%= page.category %>/<%= page.slug %>" class="btn btn-secondary">❌ Hủy</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

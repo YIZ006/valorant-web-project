@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quản lý Roles</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+
+    <style>
+      #editForm {
+        display: none;
+        width: 100%;
+        border: 2px solid #ccc;
+        padding: 10px;
+        margin-top: 20px;
+        background: #fafafa;
+      }
+      #editForm input, #editForm select {
+        padding: 6px;
+        margin: 5px;
+        width: 200px;
+      }
+    </style>
+  
+</head>
+<body>
+  <h1>Danh sách Roles</h1>
+  <table border="1" id="roleTable" cellspacing="0" cellpadding="8">
+    <thead style="background:#2c3e50;color:white;">
+      <tr>
+        <th>Role ID</th>
+        <th>Role Name</th>
+        <th>Role_Description</th>
+        <th>Role_icon_url</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  
+  <div id="editForm" style="display:none;margin-top:20px;padding:15px;border:1px solid #ccc;background:#fafafa;">
+    <h3>Sửa thông tin Role</h3>
+    <form id="formEditRole">
+      <input type="hidden" id="edit_role_id">
+      <label>Role Name:</label>
+      <input type="text" id="edit_role_name" required><br>
+      <label>Role_Description:</label>
+      <input type="text" id="edit_role_description" required><br>
+      <label>Role_icon_url</label>
+      <input type="text" id="edit_role_icon_url" required><br>
+      <button type="submit">💾 Lưu thay đổi</button>
+      <button type="button" onclick="closeEditForm()">Hủy</button>
+    </form>
+  </div>
+  <script src="js/agents/roles.js"></script>
+</body>
+</html>

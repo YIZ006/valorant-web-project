@@ -2,9 +2,30 @@ require("dotenv").config();
 const mysql = require("mysql2/promise");
 
 // Hỗ trợ DATABASE_URL từ Render hoặc các platform khác
+// Railway tự động tạo MYSQL_URL, ưu tiên dùng nó nếu có
 let dbConfig;
 
-if (process.env.DATABASE_URL) {
+if (process.env.MYSQL_URL) {
+  // Railway tự động tạo MYSQL_URL với Internal URL
+  try {
+    const url = new URL(process.env.MYSQL_URL);
+    const dbNameFromUrl = url.pathname.slice(1);
+    dbConfig = {
+      host: url.hostname,
+      port: parseInt(url.port) || 3306,
+      user: url.username,
+      password: url.password,
+      database: dbNameFromUrl || 'railway',
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+      ssl: false, // Internal network không cần SSL
+    };
+  } catch (error) {
+    console.error("❌ Lỗi parse MYSQL_URL:", error.message);
+    throw error;
+  }
+} else if (process.env.DATABASE_URL) {
   // Parse DATABASE_URL (format: mysql://user:password@host:port/database)
   try {
     const url = new URL(process.env.DATABASE_URL);

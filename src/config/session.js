@@ -1,5 +1,5 @@
 const sessionConfig = {
-  secret: process.env.SESSION_SECRET || "mySecretKey123",
+  secret: process.env.SESSION_SECRET || "d80c655ae436a6178767791d6bd8642657c7d72075063c9384299b73fd749eea",
   resave: false,
   saveUninitialized: false,
   cookie: {

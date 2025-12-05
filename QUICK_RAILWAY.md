@@ -17,6 +17,7 @@ Vào Web Service → Tab **"Variables"**, thêm:
 |-----|-------|---------|
 | `DATABASE_URL` | `mysql://...` | Railway tự động tạo nếu MySQL trong cùng project |
 | `SESSION_SECRET` | `...` | Chạy `node generate-secret.js` để tạo |
+| `HOST` | `0.0.0.0` | Để public access (có thể truy cập từ internet) |
 | `NODE_ENV` | `production` | |
 
 **Lưu ý**: Railway tự động tạo `DATABASE_URL` từ MySQL service trong cùng project!

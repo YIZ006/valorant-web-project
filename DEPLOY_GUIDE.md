@@ -38,7 +38,18 @@ Vào Railway → Web Service → **"Variables"**:
 - Key: `NODE_ENV`
 - Value: `production`
 
-### 4. PORT (Tùy chọn)
+### 4. HOST (Để public access)
+
+Để cho phép truy cập từ internet:
+- Key: `HOST`
+- Value: `0.0.0.0`
+
+**Lưu ý**: 
+- `0.0.0.0` = Public (có thể truy cập từ internet)
+- `localhost` hoặc `127.0.0.1` = Chỉ truy cập từ máy local
+- Mặc định: `0.0.0.0` cho production, `localhost` cho development
+
+### 5. PORT (Tùy chọn)
 
 Railway tự động set PORT, nhưng bạn có thể thêm:
 - Key: `PORT`

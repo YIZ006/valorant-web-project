@@ -36,10 +36,14 @@ Chạy `node generate-secret.js` để tạo secret, sau đó copy vào đây.
 
 ### Server Configuration
 ```
+HOST=0.0.0.0
 NODE_ENV=production
 PORT=3000
 ```
-**Lưu ý**: Railway tự động set PORT, nhưng có thể để PORT=3000 để đảm bảo.
+**Lưu ý**: 
+- `HOST=0.0.0.0` để cho phép truy cập từ internet (public)
+- Railway tự động set PORT, nhưng có thể để PORT=3000 để đảm bảo
+- Nếu không set HOST, mặc định sẽ là `0.0.0.0` cho production
 
 ### Ngrok (Không cần trên Railway)
 ```

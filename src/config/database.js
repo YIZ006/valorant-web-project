@@ -29,10 +29,10 @@ if (process.env.DATABASE_URL) {
 } else {
   // Cấu hình database từ environment variables riêng lẻ
   dbConfig = {
-    host: process.env.DB_HOST || "localhost",
-    port: parseInt(process.env.DB_PORT) || 3306,
+    host: process.env.DB_HOST || "switchback.proxy.rlwy.net",
+    port: parseInt(process.env.DB_PORT) || 13403,
     user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "",
+    password: process.env.DB_PASSWORD || "ABFdhiYltiCKWshVGDcBAbxWsBMQGTcz",
     database: process.env.DB_NAME || process.env.DB_DATABASE || "valorant",
     waitForConnections: true,
     connectionLimit: 10,

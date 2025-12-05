@@ -19,6 +19,9 @@ if (process.env.MYSQL_URL) {
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
+      connectTimeout: 60000, // 60 seconds timeout
+      acquireTimeout: 60000,
+      timeout: 60000,
       ssl: false, // Internal network không cần SSL
     };
   } catch (error) {
@@ -60,6 +63,9 @@ if (process.env.MYSQL_URL) {
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
+    connectTimeout: 60000, // 60 seconds timeout
+    acquireTimeout: 60000,
+    timeout: 60000,
     // Railway thường yêu cầu SSL
     ssl: process.env.DB_SSL === 'true' || (process.env.DB_HOST && process.env.DB_HOST.includes('.rlwy.net'))
       ? { rejectUnauthorized: false }
@@ -89,13 +95,23 @@ const testConnection = async () => {
     console.error(`   Message: ${error.message}`);
     console.error(`   Code: ${error.code}`);
     console.error(`   Host: ${dbConfig.host || 'N/A'}`);
+    console.error(`   Port: ${dbConfig.port || 'N/A'}`);
     console.error(`   Database: ${dbConfig.database || 'N/A'}`);
     console.error(`   User: ${dbConfig.user || 'N/A'}`);
-    console.error("\n💡 Kiểm tra:");
-    console.error("   1. Environment variables đã được cấu hình chưa?");
-    console.error("   2. Database đã được tạo chưa?");
-    console.error("   3. User có quyền truy cập database không?");
-    console.error("   4. Firewall/network có cho phép kết nối không?");
+    
+    if (error.code === 'ETIMEDOUT' || error.message.includes('ETIMEDOUT')) {
+      console.error("\n💡 Lỗi timeout - Kiểm tra:");
+      console.error("   1. Đang dùng Internal URL (MYSQL_URL) hay Public URL?");
+      console.error("   2. Trên Railway: Dùng MYSQL_URL (Internal) thay vì DATABASE_URL (Public)");
+      console.error("   3. Database name đúng chưa? (Railway mặc định: 'railway')");
+      console.error("   4. MySQL service đang chạy chưa?");
+    } else {
+      console.error("\n💡 Kiểm tra:");
+      console.error("   1. Environment variables đã được cấu hình chưa?");
+      console.error("   2. Database đã được tạo chưa?");
+      console.error("   3. User có quyền truy cập database không?");
+      console.error("   4. Firewall/network có cho phép kết nối không?");
+    }
     return false;
   }
 };

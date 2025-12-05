@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng quản trị</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <a href="/dashboard" class="logo">
+        <img src="https://bknet.edu.vn/wp-content/uploads/2024/06/logo-bknet-2024.png" alt="Valorant" />
+      </a>
+      <div id="user-info">👋 Xin chào Admin...</div>
+      <a href="/auth/logout" class="btn-logout">Đăng xuất</a>
+    </header>
+
+    <aside class="sidebar">
+      <ul>
+        <li><a href="#" data-page="home"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="#" data-page="maps"><i class="fas fa-map"></i> Quản lý Bản Đồ</a></li>
+        <li><a href="#" data-page="roles"><i class="fas fa-shield-alt"></i> Quản lý Roles</a></li>
+        <li><a href="#" data-page="agents"><i class="fas fa-users"></i> Quản lý Agents</a></li>
+        <li><a href="#" data-page="admin"><i class="fas fa-user-shield"></i> Quản lý Admin</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <section id="content-area" class="welcome-card">
+        <h2>Chào mừng bạn đến trang quản trị!</h2>
+        <p>Chọn một mục ở menu bên trái để bắt đầu.</p>
+      </section>
+    </main>
+
+    <script>
+      const userInfo = document.getElementById("user-info");
+      const contentArea = document.getElementById("content-area");
+      const pageScripts = {
+        admin: { src: "/js/admin/admin.js", id: "admin-module" },
+        agents: { src: "/js/agents/agents.js", id: "agents-module" },
+        roles: { src: "/js/agents/roles.js", id: "roles-module" },
+        maps: { src: "/js/agents/maps.js", id: "maps-module" },
+      };
+
+      const loadUser = async () => {
+        try {
+          const response = await fetch("/api/admin/me");
+          if (!response.ok) throw new Error("Unauthorized");
+          const user = await response.json();
+          userInfo.innerHTML = `👋 Xin chào <b>${user.username}</b>`;
+        } catch {
+          userInfo.textContent = "Bạn chưa đăng nhập.";
+        }
+      };
+
+      const attachScript = (config) => {
+        if (!config) return;
+        const existing = document.getElementById(config.id);
+        if (existing) {
+          existing.remove();
+        }
+        const script = document.createElement("script");
+        script.src = config.src;
+        script.id = config.id;
+        document.body.appendChild(script);
+      };
+
+      const loadPage = async (page) => {
+        if (page === "home") {
+          contentArea.className = "welcome-card";
+          contentArea.innerHTML = "<h2>Trang chủ</h2><p>Chào mừng quay lại!</p>";
+          return;
+        }
+
+        try {
+          const response = await fetch(`/pages/${page}`);
+          if (!response.ok) throw new Error("Not Found");
+          const html = await response.text();
+          contentArea.className = "page-container";
+          contentArea.innerHTML = html;
+          attachScript(pageScripts[page]);
+        } catch (error) {
+          contentArea.className = "page-container";
+          contentArea.innerHTML =
+            "<p class='error-text'>Không thể tải nội dung. Vui lòng thử lại sau.</p>";
+        }
+      };
+
+      document.querySelectorAll(".sidebar a").forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const page = event.currentTarget.dataset.page;
+          loadPage(page);
+        });
+      });
+
+      loadUser();
+    </script>
+  </body>
+</html>

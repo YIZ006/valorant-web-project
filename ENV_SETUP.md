@@ -50,7 +50,7 @@ NGROK_AUTH_TOKEN=your_actual_token_here
 
 Sau đó khởi động lại server:
 ```bash
-node server.js
+npm start
 ```
 
 Bạn sẽ thấy URL public ngrok trong console!

@@ -16,8 +16,8 @@ npm install
 
 ### Bước 2: Tạo database
 1. Tạo database MySQL tên `valorant`
-2. Chạy file `database.sql` để tạo cấu trúc bảng
-3. Chạy file `sample_pages_data.sql` để thêm dữ liệu mẫu
+2. Chạy file `database/migrations/001_init.sql` để tạo cấu trúc bảng
+3. Chạy file `database/seeders/001_sample_pages_data.sql` để thêm dữ liệu mẫu
 
 ### Bước 3: Cấu hình Environment Variables
 1. Tạo file `.env` trong thư mục gốc của project
@@ -55,7 +55,7 @@ NGROK_AUTH_TOKEN=your_ngrok_token_here
 
 ### Bước 4: Chạy server
 ```bash
-node server.js
+npm start
 ```
 
 Server sẽ chạy tại: `http://localhost:3000`
@@ -108,18 +108,26 @@ Thay `localhost:3000` bằng URL ngrok của bạn:
 
 ```
 valorant_prj/
-├── server.js              # File chính chạy Express server
-├── database.sql           # Cấu trúc database
-├── sample_pages_data.sql  # Dữ liệu mẫu cho wiki
-├── views/                 # Template EJS
-│   ├── wiki_page.ejs     # Hiển thị trang wiki
-│   ├── edit_page.ejs     # Form chỉnh sửa
-│   └── wiki_list.ejs    # Danh sách trang
-├── private/               # Giao diện admin
-│   ├── dashboard.html
-│   ├── login.html
-│   └── pages/
-└── public/               # File tĩnh (CSS, JS, images)
+├── src/
+│   ├── server.js                 # Điểm vào (Express + ngrok)
+│   ├── bootstrap/app.js          # Khởi tạo app, middleware, static
+│   ├── config/                   # database.js, session.js
+│   ├── app/
+│   │   ├── Http/
+│   │   │   ├── Controllers/      # Auth, Wiki, Admin, Agents...
+│   │   │   └── Middlewares/      # ensureAuthenticated, ...
+│   │   └── Services/             # Tầng business + DB queries
+│   ├── routes/
+│   │   ├── web.js                # Routes giao diện (wiki, auth, dashboard)
+│   │   └── api.js                # Routes REST `/api/*`
+│   └── resources/views/          # Template EJS
+├── database/
+│   ├── migrations/001_init.sql   # Cấu trúc database
+│   └── seeders/001_sample_pages_data.sql
+├── public/                       # Asset public (login, landing)
+├── private/                      # Trang dashboard/admin tĩnh
+├── generate-secret.js
+└── ENV_SETUP.md
 ```
 
 ## 🔧 Tính năng đã hoàn thành
@@ -164,7 +172,7 @@ Project đã được tích hợp sẵn ngrok để bạn có thể chia sẻ se
    ```
 4. **Khởi động lại server:**
    ```bash
-   node server.js
+   npm start
    ```
 5. **Kiểm tra console:** Bạn sẽ thấy URL public ngrok, ví dụ:
    ```
@@ -194,7 +202,7 @@ Project đã được tích hợp sẵn ngrok để bạn có thể chia sẻ se
 - Đảm bảo EJS đã được cài đặt: `npm install ejs`
 
 **Lỗi 404:**
-- Kiểm tra route trong server.js
+- Kiểm tra route trong `src/server.js`
 - Đảm bảo URL đúng format: `/wiki/Map/ascent`
 
 ## 📝 Ghi chú

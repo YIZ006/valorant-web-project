@@ -1,131 +1,90 @@
-# 🎮 Valorant Wiki - Cấu trúc Routes
+# 🎮 Valorant Wiki - Cấu trúc Routes (Laravel-style)
 
-## 📁 Cấu trúc thư mục Routes
+## 📁 Thư mục liên quan
 
 ```
-routes/
-├── index.js          # Main routes file - mount tất cả routes
-├── auth.js           # Authentication routes (login, register, logout)
-├── wiki.js           # Wiki routes (view, edit, list pages)
-├── admin.js          # Admin management routes
-├── agents.js         # Agent management routes
-├── roles.js          # Role management routes
-└── maps.js           # Map management routes
+src/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/    # Chứa toàn bộ controller
+│   │   └── Middlewares/    # ensureAuthenticated, ensureApiAuthenticated
+│   └── Services/           # Làm việc với database / business logic
+├── routes/
+│   ├── web.js              # Các route giao diện + auth + wiki
+│   └── api.js              # Các route REST `/api/*`
+└── bootstrap/app.js        # Nơi mount web/api routes vào Express app
 ```
 
-## 🔗 URL Mapping
+## 🔗 URL Mapping (không đổi endpoint)
 
-### **Authentication Routes** (`/auth`)
-- `POST /auth/register` - Đăng ký admin
-- `POST /auth/login` - Đăng nhập
-- `GET /auth/logout` - Đăng xuất
+| Nhóm | Endpoints | Controller |
+| --- | --- | --- |
+| Auth (`/auth`) | `POST /auth/register`, `POST /auth/login`, `GET /auth/logout` | `AuthController` |
+| Wiki (`/wiki`) | `GET /wiki`, `GET /wiki/:category/:slug`, `GET/POST /wiki/edit/:id` | `WikiController` |
+| Admin (`/api/admin`) | `GET /api/admin`, `GET /api/admin/me`, `PUT /api/admin/:admin_id`, `DELETE /api/admin/:admin_id` | `AdminController` |
+| Agents (`/api/agents`) | CRUD | `AgentController` |
+| Roles (`/api/roles`) | CRUD | `RoleController` |
+| Maps (`/api/maps`) | CRUD | `MapController` |
+| Static pages | `/dashboard.html`, `/admin.html`, `/pages/:name`, ... | Handled in `web.js` với middleware `ensureAuthenticated` |
 
-### **Wiki Routes** (`/wiki`)
-- `GET /wiki` - Danh sách tất cả trang wiki
-- `GET /wiki/:category/:slug` - Xem trang wiki cụ thể
-- `GET /wiki/edit/:id` - Form chỉnh sửa trang (cần đăng nhập)
-- `POST /wiki/edit/:id` - Lưu chỉnh sửa trang (cần đăng nhập)
+## 🧱 Luồng request
 
-### **Admin API Routes** (`/api/admin`)
-- `GET /api/admin` - Lấy danh sách admin
-- `PUT /api/admin/:admin_id` - Cập nhật admin
-- `DELETE /api/admin/:admin_id` - Xóa admin
-- `GET /api/admin/me` - Thông tin admin hiện tại
+1. **Router** (`routes/web.js` hoặc `routes/api.js`) định nghĩa endpoint.
+2. **Middleware** `ensureAuthenticated`/`ensureApiAuthenticated` bảo vệ route.
+3. **Controller** xử lý request, validate dữ liệu và gọi Service.
+4. **Service** làm việc với database thông qua `mysql2` pool.
 
-### **Agent API Routes** (`/api/agents`)
-- `GET /api/agents` - Lấy danh sách agents
-- `POST /api/agents` - Thêm agent mới
-- `PUT /api/agents/:agent_id` - Cập nhật agent
-- `DELETE /api/agents/:agent_id` - Xóa agent
+Không còn `global.pool`. Tầng Service import trực tiếp `pool` từ `src/config/database.js`, giống cách Laravel dùng Query Builder/Eloquent trong service layer.
 
-### **Role API Routes** (`/api/roles`)
-- `GET /api/roles` - Lấy danh sách roles
-- `POST /api/roles` - Thêm role mới
-- `PUT /api/roles/:role_id` - Cập nhật role
-- `DELETE /api/roles/:role_id` - Xóa role
+## 🧩 Ví dụ rút gọn
 
-### **Map API Routes** (`/api/maps`)
-- `GET /api/maps` - Lấy danh sách maps
-- `POST /api/maps` - Thêm map mới
-- `PUT /api/maps/:map_id` - Cập nhật map
-- `DELETE /api/maps/:map_id` - Xóa map
+```js
+// routes/api.js
+router.get("/agents", ensureApiAuthenticated, AgentController.index);
+```
 
-### **Other Routes**
-- `GET /pages/:name` - Serve các trang admin
-- `GET /dashboard.html` - Dashboard admin
-- `GET /admin.html` - Trang quản lý admin
+```js
+// app/Http/Controllers/AgentController.js
+const AgentService = require("../../Services/AgentService");
 
-## 🛠️ Cách hoạt động
+class AgentController {
+  static async index(req, res) {
+    const agents = await AgentService.listAgents();
+    res.json(agents);
+  }
+}
+```
 
-### **1. Middleware Pattern**
-Mỗi route file sử dụng middleware pattern:
-```javascript
-// Inject pool vào request
-const injectPool = (pool) => {
-  return (req, res, next) => {
-    req.pool = pool;
-    next();
-  };
-};
-
-// Kiểm tra authentication
-const isAuthenticated = (req, res, next) => {
-  if (req.session.user) return next();
-  res.status(401).json({ error: "Chưa đăng nhập" });
+```js
+// app/Services/AgentService.js
+const { pool } = require("../../config/database");
+module.exports = {
+  listAgents: async () => {
+    const [rows] = await pool.query("SELECT * FROM agents");
+    return rows;
+  },
 };
 ```
 
-### **2. Route Mounting**
-Trong `routes/index.js`:
-```javascript
-// Mount các routes với middleware inject pool
-router.use("/auth", injectPool(global.pool), authRoutes);
-router.use("/wiki", injectPool(global.pool), wikiRoutes);
-router.use("/api/admin", injectPool(global.pool), adminRoutes);
-// ...
+## 🚀 Thêm route mới
+
+1. Tạo controller/service mới (nếu cần) dưới `src/app`.
+2. Định nghĩa endpoint trong `routes/web.js` hoặc `routes/api.js`.
+3. Mount middleware phù hợp.
+4. (Tuỳ chọn) cập nhật tài liệu nếu là module lớn.
+
+Ví dụ thêm `WeaponsController` vào API:
+
+```js
+// routes/api.js
+const WeaponsController = require("../app/Http/Controllers/WeaponsController");
+router.get("/weapons", ensureApiAuthenticated, WeaponsController.index);
 ```
 
-### **3. Server Integration**
-Trong `server.js`:
-```javascript
-// Import routes
-const routes = require("./routes");
+## ✅ Lợi ích
 
-// Mount tất cả routes
-app.use("/", routes);
-```
-
-## 🎯 Lợi ích của cấu trúc này
-
-✅ **Tách biệt concerns** - Mỗi module quản lý một nhóm routes riêng
-✅ **Dễ maintain** - Sửa một module không ảnh hưởng module khác
-✅ **Reusable** - Có thể tái sử dụng middleware và logic
-✅ **Scalable** - Dễ dàng thêm routes mới
-✅ **Clean code** - Server.js ngắn gọn, dễ đọc
-
-## 🚀 Cách thêm routes mới
-
-1. **Tạo file route mới** trong `routes/`
-2. **Export router** từ file đó
-3. **Import và mount** trong `routes/index.js`
-4. **Test** routes mới
-
-Ví dụ thêm routes cho weapons:
-```javascript
-// routes/weapons.js
-const express = require("express");
-const router = express.Router();
-
-router.get("/", async (req, res) => {
-  // Logic lấy danh sách weapons
-});
-
-module.exports = router;
-```
-
-```javascript
-// routes/index.js
-const weaponsRoutes = require("./weapons");
-router.use("/api/weapons", injectPool(global.pool), weaponsRoutes);
-```
+- Cấu trúc thư mục quen thuộc nếu bạn từng dùng Laravel.
+- Controllers mỏng, dễ đọc; Services gom toàn bộ truy cập DB.
+- Không cần `global` state, dễ test và mở rộng.
+- Dễ thêm middleware/guards mới cho từng nhóm route.
 

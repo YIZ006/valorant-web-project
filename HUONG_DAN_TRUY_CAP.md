@@ -12,7 +12,7 @@ Dự án này có thể truy cập qua 2 cách:
 
 ### Bước 1: Khởi động server
 ```bash
-node server.js
+npm start
 ```
 
 ### Bước 2: Truy cập trên cùng máy tính
@@ -71,7 +71,7 @@ npm install ngrok
 
 ### Bước 4: Khởi động server
 ```bash
-node server.js
+npm start
 ```
 
 ### Bước 5: Lấy URL Public
@@ -160,7 +160,7 @@ npm install ngrok
 - Ngrok service đang bảo trì
 
 **Giải pháp:**
-1. Kiểm tra server đang chạy: `node server.js`
+1. Kiểm tra server đang chạy: `npm start`
 2. Kiểm tra console có hiển thị URL ngrok không
 3. Thử khởi động lại server
 

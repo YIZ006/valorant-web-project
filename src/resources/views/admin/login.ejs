@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Đăng Nhập Admin</title>
+    <link rel="stylesheet" href="/css/auth.css" />
+  </head>
+  <body class="auth-body">
+    <main class="auth-card">
+      <header>
+        <p class="eyebrow">Valorant Control Center</p>
+        <h1>Đăng nhập quản trị</h1>
+        <p class="subtitle">Quản lý nội dung và người dùng chỉ trong vài bước.</p>
+      </header>
+
+      <form action="/auth/login" method="POST" class="auth-form">
+        <label>
+          <span>Tên đăng nhập</span>
+          <input type="text" id="username" name="username" required />
+        </label>
+
+        <label>
+          <span>Mật khẩu</span>
+          <input type="password" id="password" name="password" required />
+        </label>
+
+        <button type="submit" class="btn-primary">Đăng nhập</button>
+      </form>
+
+      <p class="auth-switch">
+        Chưa có tài khoản?
+        <a href="/register" class="link">Đăng ký ngay</a>
+      </p>
+    </main>
+  </body>
+</html>

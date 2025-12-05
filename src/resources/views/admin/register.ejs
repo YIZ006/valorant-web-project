@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Đăng ký Admin</title>
+    <link rel="stylesheet" href="/css/auth.css" />
+  </head>
+  <body class="auth-body">
+    <main class="auth-card">
+      <header>
+        <p class="eyebrow">Valorant Control Center</p>
+        <h1>Tạo tài khoản quản trị</h1>
+        <p class="subtitle">Phân quyền quản lý và cộng tác dễ dàng.</p>
+      </header>
+
+      <form id="registerForm" class="auth-form">
+        <label>
+          <span>Tên đăng nhập</span>
+          <input type="text" id="username" name="username" required />
+        </label>
+
+        <label>
+          <span>Mật khẩu</span>
+          <input type="password" id="password" name="password" required />
+        </label>
+
+        <label>
+          <span>Email</span>
+          <input type="email" id="email" name="email" placeholder="abc@gmail.com" required />
+        </label>
+
+        <label>
+          <span>Số điện thoại</span>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            pattern="0[0-9]{9}"
+            placeholder="Nhập 10 số bắt đầu bằng 0"
+            required
+          />
+        </label>
+
+        <label>
+          <span>Quyền</span>
+          <select name="quyen" required>
+            <option value="admin">Admin</option>
+            <option value="editor">Editor</option>
+            <option value="viewer">Viewer</option>
+          </select>
+        </label>
+
+        <button type="submit" class="btn-primary">Tạo tài khoản</button>
+      </form>
+
+      <p class="auth-switch">
+        Đã có tài khoản?
+        <a href="/login" class="link">Đăng nhập</a>
+      </p>
+    </main>
+
+    <script>
+      document.getElementById("registerForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = Object.fromEntries(new FormData(event.target));
+
+        const response = await fetch("/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const message = await response.text();
+        alert(message);
+      });
+    </script>
+  </body>
+</html>

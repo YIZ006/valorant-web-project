@@ -39,21 +39,58 @@ async function runMigration() {
     connection = await mysql.createConnection(dbConfig);
     console.log("✅ Kết nối thành công!");
 
+    // Xóa foreign keys cũ trước khi chạy migration
+    console.log("🔧 Đang xóa foreign keys cũ (nếu có)...");
+    const dropConstraints = [
+      "ALTER TABLE Abilities DROP FOREIGN KEY Abilities_ibfk_1",
+      "ALTER TABLE Weapon_Damage DROP FOREIGN KEY Weapon_Damage_ibfk_1",
+      "ALTER TABLE Team_Compositions DROP FOREIGN KEY Team_Compositions_ibfk_1",
+      "ALTER TABLE Composition_Agents DROP FOREIGN KEY Composition_Agents_ibfk_1",
+      "ALTER TABLE Composition_Agents DROP FOREIGN KEY Composition_Agents_ibfk_2",
+      "ALTER TABLE Revisions DROP FOREIGN KEY Revisions_ibfk_1",
+      "ALTER TABLE Agents DROP FOREIGN KEY fk_agents_role",
+      "ALTER TABLE Guides DROP FOREIGN KEY fk_guides_map",
+      "ALTER TABLE Guides DROP FOREIGN KEY fk_guides_agent"
+    ];
+
+    for (const dropSql of dropConstraints) {
+      try {
+        await connection.query(dropSql);
+        console.log(`   ✅ Đã xóa: ${dropSql.split(' ')[2]}`);
+      } catch (error) {
+        // Bỏ qua lỗi nếu constraint không tồn tại
+        if (!error.message.includes("doesn't exist") && !error.message.includes("Unknown key")) {
+          // Chỉ log nếu không phải lỗi "không tồn tại"
+        }
+      }
+    }
+
     // Đọc file migration
     const migrationPath = path.join(__dirname, "../database/migrations/001_init.sql");
     const sql = fs.readFileSync(migrationPath, "utf8");
 
-    console.log("📝 Đang chạy migration...");
+    console.log("\n📝 Đang chạy migration...");
     
     // Chia SQL thành các câu lệnh riêng biệt
     const statements = sql
       .split(";")
       .map((s) => s.trim())
-      .filter((s) => s.length > 0 && !s.startsWith("--"));
+      .filter((s) => s.length > 0 && !s.startsWith("--") && !s.startsWith("/*"));
 
     for (const statement of statements) {
       if (statement.trim()) {
-        await connection.query(statement);
+        try {
+          await connection.query(statement);
+        } catch (error) {
+          // Bỏ qua lỗi duplicate constraint hoặc table exists
+          if (error.message.includes('Duplicate foreign key') || 
+              error.message.includes('already exists') ||
+              error.code === 'ER_DUP_KEYNAME') {
+            console.log(`   ⏭️  Bỏ qua: ${error.message.substring(0, 60)}...`);
+          } else {
+            throw error; // Throw các lỗi khác
+          }
+        }
       }
     }
 

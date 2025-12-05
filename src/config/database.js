@@ -43,11 +43,19 @@ if (process.env.MYSQL_URL) {
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
+      connectTimeout: 60000, // 60 seconds timeout
+      acquireTimeout: 60000,
+      timeout: 60000,
       // Railway thường yêu cầu SSL cho public connections
       ssl: process.env.DB_SSL === 'true' || url.hostname.includes('.rlwy.net') 
         ? { rejectUnauthorized: false } 
         : false,
     };
+    
+    // Warning nếu đang dùng Public URL trên Railway
+    if (url.hostname.includes('.rlwy.net') && !process.env.MYSQL_URL) {
+      console.warn("⚠️  Đang dùng DATABASE_URL (Public). Nên dùng MYSQL_URL (Internal) trên Railway để tránh timeout!");
+    }
   } catch (error) {
     console.error("❌ Lỗi parse DATABASE_URL:", error.message);
     throw error;

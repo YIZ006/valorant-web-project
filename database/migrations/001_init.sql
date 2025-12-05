@@ -1,4 +1,11 @@
-CREATE TABLE Agents (
+CREATE TABLE IF NOT EXISTS Roles(
+    role_id INT(10) NOT NULL AUTO_INCREMENT,
+    role_name VARCHAR(25) NOT NULL,
+    role_description TEXT,
+    role_icon_url VARCHAR(255) NOT NULL,
+    PRIMARY KEY(role_id)
+);
+CREATE TABLE IF NOT EXISTS Agents (
     agent_id INT(10) NOT NULL AUTO_INCREMENT,
     agent_name VARCHAR(50) NOT NULL,
     role_id INT(10) NOT NULL,
@@ -6,14 +13,7 @@ CREATE TABLE Agents (
     portrait_image_url VARCHAR(255) NOT NULL,
     PRIMARY KEY (agent_id)
 );
-CREATE TABLE Roles(
-    role_id INT(10) NOT NULL AUTO_INCREMENT,
-    role_name VARCHAR(25) NOT NULL,
-    role_description TEXT,
-    role_icon_url VARCHAR(255) NOT NULL,
-    PRIMARY KEY(role_id)
-);
-CREATE TABLE Abilities (
+CREATE TABLE IF NOT EXISTS Abilities (
     ability_id INT(10) NOT NULL AUTO_INCREMENT,
     agent_id INT(10) NOT NULL,
     ability_name VARCHAR(50) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE Abilities (
     PRIMARY KEY (ability_id),
     FOREIGN KEY (agent_id) REFERENCES Agents(agent_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE TABLE Weapons(
+CREATE TABLE IF NOT EXISTS Weapons(
     weapon_id INT(10) NOT NULL AUTO_INCREMENT,
     weapon_name VARCHAR(25) NOT NULL,
     weapon_category ENUM(
@@ -48,7 +48,7 @@ CREATE TABLE Weapons(
     weapon_image_url VARCHAR(255) NOT NULL,
     PRIMARY KEY(weapon_id)
 );
-CREATE TABLE Weapon_Damage(
+CREATE TABLE IF NOT EXISTS Weapon_Damage(
     damage_id INT(10) NOT NULL AUTO_INCREMENT,
     weapon_id INT(10) NOT NULL,
     range_start INT NOT NULL,  -- mét bắt đầu
@@ -59,14 +59,14 @@ CREATE TABLE Weapon_Damage(
     PRIMARY KEY(damage_id),
     FOREIGN KEY(weapon_id) REFERENCES Weapons(weapon_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE TABLE Maps(
+CREATE TABLE IF NOT EXISTS Maps(
     map_id INT NOT NULL AUTO_INCREMENT,
     map_name VARCHAR(25) NOT NULL,
     description TEXT,
     layout_image_url VARCHAR(255) NOT NULL,
     PRIMARY KEY(map_id)
 );
-CREATE TABLE Guides(
+CREATE TABLE IF NOT EXISTS Guides(
     guide_id INT(10) NOT NULL AUTO_INCREMENT,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE Guides(
     agent_id INT DEFAULT NULL,
     PRIMARY KEY(guide_id)
 );
-CREATE TABLE Team_Compositions (
+CREATE TABLE IF NOT EXISTS Team_Compositions (
     composition_id INT(10) NOT NULL AUTO_INCREMENT,
     map_id INT(10) NOT NULL,
     composition_name VARCHAR(100) NOT NULL,
@@ -84,14 +84,14 @@ CREATE TABLE Team_Compositions (
     PRIMARY KEY (composition_id),
     FOREIGN KEY (map_id) REFERENCES Maps(map_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE TABLE Composition_Agents(
+CREATE TABLE IF NOT EXISTS Composition_Agents(
     composition_id INT(10) NOT NULL,
     agent_id INT(10) NOT NULL,
     PRIMARY KEY(composition_id, agent_id),
     FOREIGN KEY(composition_id) REFERENCES Team_Compositions(composition_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(agent_id) REFERENCES Agents(agent_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE TABLE Pages (
+CREATE TABLE IF NOT EXISTS Pages (
     page_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE Pages (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Revisions (
+CREATE TABLE IF NOT EXISTS Revisions (
     revision_id INT AUTO_INCREMENT PRIMARY KEY,
     page_id INT NOT NULL,
     author VARCHAR(100),
@@ -119,7 +119,7 @@ ALTER TABLE
 ALTER TABLE
     Guides ADD CONSTRAINT fk_guides_agent FOREIGN KEY(agent_id) REFERENCES Agents(agent_id) ON DELETE SET NULL ON UPDATE CASCADE;
 
-    CREATE TABLE Admin(
+    CREATE TABLE IF NOT EXISTS Admin(
     admin_id INT(10) NOT NULL AUTO_INCREMENT,
     username VARCHAR(25) NOT NULL,
     `password` VARCHAR(25) NOT NULL,

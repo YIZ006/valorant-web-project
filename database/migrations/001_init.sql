@@ -26,7 +26,7 @@ CREATE TABLE Abilities (
     description TEXT,
     video_url VARCHAR(255) NOT NULL,
     PRIMARY KEY (ability_id),
-    FOREIGN KEY (agent_id) REFERENCES Agents(agent_id)
+    FOREIGN KEY (agent_id) REFERENCES Agents(agent_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE Weapons(
     weapon_id INT(10) NOT NULL AUTO_INCREMENT,
@@ -57,7 +57,7 @@ CREATE TABLE Weapon_Damage(
     body_damage DECIMAL(6, 2) NOT NULL,
     leg_damage DECIMAL(6, 2) NOT NULL,
     PRIMARY KEY(damage_id),
-    FOREIGN KEY(weapon_id) REFERENCES Weapons(weapon_id)
+    FOREIGN KEY(weapon_id) REFERENCES Weapons(weapon_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE Maps(
     map_id INT NOT NULL AUTO_INCREMENT,
@@ -82,14 +82,14 @@ CREATE TABLE Team_Compositions (
     composition_name VARCHAR(100) NOT NULL,
     description TEXT,
     PRIMARY KEY (composition_id),
-    FOREIGN KEY (map_id) REFERENCES Maps(map_id)
+    FOREIGN KEY (map_id) REFERENCES Maps(map_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE Composition_Agents(
     composition_id INT(10) NOT NULL,
     agent_id INT(10) NOT NULL,
     PRIMARY KEY(composition_id, agent_id),
-    FOREIGN KEY(composition_id) REFERENCES Team_Compositions(composition_id),
-    FOREIGN KEY(agent_id) REFERENCES Agents(agent_id)
+    FOREIGN KEY(composition_id) REFERENCES Team_Compositions(composition_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(agent_id) REFERENCES Agents(agent_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE Pages (
     page_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -109,15 +109,15 @@ CREATE TABLE Revisions (
     summary TEXT,
     content LONGTEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (page_id) REFERENCES Pages(page_id)
+    FOREIGN KEY (page_id) REFERENCES Pages(page_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 ALTER TABLE
-    Agents ADD CONSTRAINT fk_agents_role FOREIGN KEY(role_id) REFERENCES Roles(role_id);
+    Agents ADD CONSTRAINT fk_agents_role FOREIGN KEY(role_id) REFERENCES Roles(role_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE
-    Guides ADD CONSTRAINT fk_guides_map FOREIGN KEY(map_id) REFERENCES Maps(map_id);
+    Guides ADD CONSTRAINT fk_guides_map FOREIGN KEY(map_id) REFERENCES Maps(map_id) ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE
-    Guides ADD CONSTRAINT fk_guides_agent FOREIGN KEY(agent_id) REFERENCES Agents(agent_id);
+    Guides ADD CONSTRAINT fk_guides_agent FOREIGN KEY(agent_id) REFERENCES Agents(agent_id) ON DELETE SET NULL ON UPDATE CASCADE;
 
     CREATE TABLE Admin(
     admin_id INT(10) NOT NULL AUTO_INCREMENT,

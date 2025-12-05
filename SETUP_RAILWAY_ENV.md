@@ -30,13 +30,8 @@ SESSION_SECRET=6f5c5772d8788374b05bf3c1c09baeac0d44c702f3d643bd3290e6f61adf9f75
 # 🚀 SERVER CONFIGURATION
 # ==========================
 PORT=3000
+HOST=0.0.0.0
 NODE_ENV=development
-
-# ==========================
-# 🌐 NGROK CONFIGURATION (Không cần khi dùng Railway)
-# ==========================
-ENABLE_NGROK=false
-NGROK_AUTH_TOKEN=
 ```
 
 ## ⚠️ Lưu ý quan trọng

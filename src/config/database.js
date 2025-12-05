@@ -8,8 +8,26 @@ let dbConfig;
 if (process.env.MYSQL_URL) {
   // Railway tự động tạo MYSQL_URL với Internal URL
   try {
+    // Log để debug (ẩn password)
+    const mysqlUrlForLog = process.env.MYSQL_URL.replace(/:[^:@]+@/, ':****@');
+    console.log(`🔍 Đang parse MYSQL_URL: ${mysqlUrlForLog.substring(0, 50)}...`);
+    
+    // Kiểm tra format URL
+    if (!process.env.MYSQL_URL.startsWith('mysql://')) {
+      throw new Error(`MYSQL_URL phải bắt đầu bằng 'mysql://'. Giá trị hiện tại: ${mysqlUrlForLog.substring(0, 100)}`);
+    }
+    
     const url = new URL(process.env.MYSQL_URL);
     const dbNameFromUrl = url.pathname.slice(1);
+    
+    // Validate các thành phần cần thiết
+    if (!url.hostname) {
+      throw new Error('MYSQL_URL thiếu hostname');
+    }
+    if (!url.username) {
+      throw new Error('MYSQL_URL thiếu username');
+    }
+    
     dbConfig = {
       host: url.hostname,
       port: parseInt(url.port) || 3306,
@@ -24,16 +42,42 @@ if (process.env.MYSQL_URL) {
       timeout: 60000,
       ssl: false, // Internal network không cần SSL
     };
+    
+    console.log(`✅ Parse MYSQL_URL thành công: ${url.hostname}:${dbConfig.port}/${dbConfig.database}`);
   } catch (error) {
     console.error("❌ Lỗi parse MYSQL_URL:", error.message);
+    console.error(`   MYSQL_URL length: ${process.env.MYSQL_URL ? process.env.MYSQL_URL.length : 0}`);
+    console.error(`   MYSQL_URL starts with 'mysql://': ${process.env.MYSQL_URL ? process.env.MYSQL_URL.startsWith('mysql://') : false}`);
+    if (process.env.MYSQL_URL) {
+      const safeUrl = process.env.MYSQL_URL.replace(/:[^:@]+@/, ':****@');
+      console.error(`   MYSQL_URL (safe): ${safeUrl.substring(0, 100)}...`);
+    }
     throw error;
   }
 } else if (process.env.DATABASE_URL) {
   // Parse DATABASE_URL (format: mysql://user:password@host:port/database)
   try {
+    // Log để debug (ẩn password)
+    const dbUrlForLog = process.env.DATABASE_URL.replace(/:[^:@]+@/, ':****@');
+    console.log(`🔍 Đang parse DATABASE_URL: ${dbUrlForLog.substring(0, 50)}...`);
+    
+    // Kiểm tra format URL
+    if (!process.env.DATABASE_URL.startsWith('mysql://')) {
+      throw new Error(`DATABASE_URL phải bắt đầu bằng 'mysql://'. Giá trị hiện tại: ${dbUrlForLog.substring(0, 100)}`);
+    }
+    
     const url = new URL(process.env.DATABASE_URL);
     // Lấy database name từ URL, nếu không có thì dùng 'railway' (Railway default)
     const dbNameFromUrl = url.pathname.slice(1); // Remove leading '/'
+    
+    // Validate các thành phần cần thiết
+    if (!url.hostname) {
+      throw new Error('DATABASE_URL thiếu hostname');
+    }
+    if (!url.username) {
+      throw new Error('DATABASE_URL thiếu username');
+    }
+    
     dbConfig = {
       host: url.hostname,
       port: parseInt(url.port) || 3306,
@@ -52,12 +96,20 @@ if (process.env.MYSQL_URL) {
         : false,
     };
     
+    console.log(`✅ Parse DATABASE_URL thành công: ${url.hostname}:${dbConfig.port}/${dbConfig.database}`);
+    
     // Warning nếu đang dùng Public URL trên Railway
     if (url.hostname.includes('.rlwy.net') && !process.env.MYSQL_URL) {
       console.warn("⚠️  Đang dùng DATABASE_URL (Public). Nên dùng MYSQL_URL (Internal) trên Railway để tránh timeout!");
     }
   } catch (error) {
     console.error("❌ Lỗi parse DATABASE_URL:", error.message);
+    console.error(`   DATABASE_URL length: ${process.env.DATABASE_URL ? process.env.DATABASE_URL.length : 0}`);
+    console.error(`   DATABASE_URL starts with 'mysql://': ${process.env.DATABASE_URL ? process.env.DATABASE_URL.startsWith('mysql://') : false}`);
+    if (process.env.DATABASE_URL) {
+      const safeUrl = process.env.DATABASE_URL.replace(/:[^:@]+@/, ':****@');
+      console.error(`   DATABASE_URL (safe): ${safeUrl.substring(0, 100)}...`);
+    }
     throw error;
   }
 } else {

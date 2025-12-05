@@ -140,25 +140,25 @@ ALTER TABLE admin
 MODIFY `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 ALTER TABLE admin ADD UNIQUE (username);
-INSERT INTO weapons (weapon_id, weapon_name, weapon_category, cost, magazine_size, wall_penetration) VALUES
-(1, 'Classic', 'Sidearms', 0, 12, 'Low'),
-(2, 'Shorty', 'Sidearms', 150, 2, 'Low'),
-(3, 'Frenzy', 'Sidearms', 450, 13, 'Low'),
-(4, 'Ghost', 'Sidearms', 500, 15, 'Medium'),
-(5, 'Sheriff', 'Sidearms', 800, 6, 'High'),
-(6, 'Stinger', 'SMGs', 950, 20, 'Low'),
-(7, 'Spectre', 'SMGs', 1600, 30, 'Medium'),
-(8, 'Bucky', 'Shotguns', 850, 5, 'Low'),
-(9, 'Judge', 'Shotguns', 1850, 7, 'Medium'),
-(10, 'Bulldog', 'Rifles', 2050, 24, 'Medium'),
-(11, 'Guardian', 'Rifles', 2250, 12, 'High'),
-(12, 'Phantom', 'Rifles', 2900, 30, 'Medium'),
-(13, 'Vandal', 'Rifles', 2900, 25, 'Medium'),
-(14, 'Marshal', 'Sniper Rifles', 950, 5, 'Medium'),
-(15, 'Operator', 'Sniper Rifles', 4700, 5, 'High'),
-(16, 'Outlaw', 'Sniper Rifles', 2400, 2, 'High'),
-(17, 'Ares', 'Machine Guns', 1600, 50, 'High'),
-(18, 'Odin', 'Machine Guns', 3200, 100, 'High');
+INSERT INTO weapons (weapon_id, weapon_name, weapon_category, cost, magazine_size, fire_rate, reload_speed, wall_penetration, weapon_image_url) VALUES
+(1, 'Classic', 'Sidearms', 0, 12, 6.75, 1.75, 'Low', '/images/weapons/classic.png'),
+(2, 'Shorty', 'Sidearms', 150, 2, 3.33, 1.75, 'Low', '/images/weapons/shorty.png'),
+(3, 'Frenzy', 'Sidearms', 450, 13, 10.0, 1.0, 'Low', '/images/weapons/frenzy.png'),
+(4, 'Ghost', 'Sidearms', 500, 15, 6.75, 1.5, 'Medium', '/images/weapons/ghost.png'),
+(5, 'Sheriff', 'Sidearms', 800, 6, 4.0, 2.25, 'High', '/images/weapons/sheriff.png'),
+(6, 'Stinger', 'SMGs', 950, 20, 16.0, 2.25, 'Low', '/images/weapons/stinger.png'),
+(7, 'Spectre', 'SMGs', 1600, 30, 13.33, 2.25, 'Medium', '/images/weapons/spectre.png'),
+(8, 'Bucky', 'Shotguns', 850, 5, 1.1, 2.5, 'Low', '/images/weapons/bucky.png'),
+(9, 'Judge', 'Shotguns', 1850, 7, 3.5, 2.2, 'Medium', '/images/weapons/judge.png'),
+(10, 'Bulldog', 'Rifles', 2050, 24, 9.15, 2.5, 'Medium', '/images/weapons/bulldog.png'),
+(11, 'Guardian', 'Rifles', 2250, 12, 4.75, 2.5, 'High', '/images/weapons/guardian.png'),
+(12, 'Phantom', 'Rifles', 2900, 30, 11.0, 2.5, 'Medium', '/images/weapons/phantom.png'),
+(13, 'Vandal', 'Rifles', 2900, 25, 9.75, 2.5, 'Medium', '/images/weapons/vandal.png'),
+(14, 'Marshal', 'Sniper Rifles', 950, 5, 1.5, 3.0, 'Medium', '/images/weapons/marshal.png'),
+(15, 'Operator', 'Sniper Rifles', 4700, 5, 0.6, 3.7, 'High', '/images/weapons/operator.png'),
+(16, 'Outlaw', 'Sniper Rifles', 2400, 2, 2.5, 2.5, 'High', '/images/weapons/outlaw.png'),
+(17, 'Ares', 'Machine Guns', 1600, 50, 10.0, 3.5, 'High', '/images/weapons/ares.png'),
+(18, 'Odin', 'Machine Guns', 3200, 100, 12.0, 5.0, 'High', '/images/weapons/odin.png');
 
 INSERT INTO weapon_damage (weapon_id, range_start, range_end, head_damage, body_damage, leg_damage) VALUES
 -- Sidearms

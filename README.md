@@ -154,36 +154,60 @@ npm run migrate    # Chạy database migration
 node generate-secret.js  # Tạo SESSION_SECRET ngẫu nhiên
 ```
 
-## 🚀 Deploy
+## 🚀 Deploy lên Railway.com
 
-### Option 1: Deploy lên Railway.com (Khuyến nghị - Dễ nhất)
+### Bước 1: Tạo MySQL Database
 
-Railway hỗ trợ cả MySQL và Web Service trên cùng platform!
+1. Vào [Railway Dashboard](https://railway.app)
+2. Tạo project mới → **"+ New"** → **"Database"** → **"MySQL"**
+3. Railway tự động tạo database và các biến môi trường
 
-Xem file [RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md) để biết hướng dẫn chi tiết.
+### Bước 2: Tạo Web Service
 
-**Tóm tắt nhanh:**
-1. Tạo **MySQL Database** trên Railway
-2. Tạo **Web Service** và connect GitHub repository
-3. Railway tự động tạo biến `DATABASE_URL` từ MySQL
-4. Thêm `SESSION_SECRET` và `NODE_ENV=production`
-5. Chạy migration: `npm run migrate` trong Railway Shell
-6. Deploy tự động khi push code lên GitHub
+1. Trong cùng project, click **"+ New"** → **"GitHub Repo"**
+2. Chọn repository: `valorant-web-project`
+3. Railway tự động detect và deploy
 
-### Option 2: Deploy lên Render.com
+### Bước 3: Cấu hình Environment Variables
 
-Xem file [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) để biết hướng dẫn chi tiết.
+Vào Web Service → Tab **"Variables"**, thêm:
 
-**Lưu ý**: Render không có MySQL trong free tier, cần dùng MySQL từ Railway hoặc dịch vụ khác.
+| Key | Value | Ghi chú |
+|-----|-------|---------|
+| `MYSQL_URL` | (Tự động) | Railway tự động tạo từ MySQL service |
+| `SESSION_SECRET` | `...` | Chạy `node generate-secret.js` để tạo |
+| `HOST` | `0.0.0.0` | **Quan trọng**: Để public access |
+| `NODE_ENV` | `production` | |
 
-### Environment Variables cần thiết:
+### Bước 4: Chạy Migration
 
+Vào Web Service → **"Settings"** → **"Open Shell"**, chạy:
+
+```bash
+npm run migrate
 ```
-DATABASE_URL=mysql://user:password@host:port/database
-SESSION_SECRET=your_random_secret_here
-NODE_ENV=production
-PORT=3000
+
+Hoặc dùng script an toàn:
+
+```bash
+npm run migrate-safe
 ```
+
+### Bước 5: Kiểm tra
+
+Vào **"Deployments"** → **"View Logs"**, bạn sẽ thấy:
+```
+✅ Kết nối database thành công!
+🚀 Server đang chạy:
+   Local: http://localhost:8080
+   Public: http://0.0.0.0:8080 (có thể truy cập từ internet)
+```
+
+### ⚠️ Lưu ý quan trọng
+
+- **HOST=0.0.0.0**: Bắt buộc để truy cập từ internet
+- Railway tự động set PORT (thường là 8080)
+- `MYSQL_URL` được Railway tự động tạo, không cần thêm thủ công
 
 ## 🔒 Bảo mật
 

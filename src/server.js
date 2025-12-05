@@ -3,8 +3,8 @@ const { testConnection } = require("./config/database");
 
 const port = process.env.PORT || 3000;
 // HOST: '0.0.0.0' để public, 'localhost' hoặc '127.0.0.1' để chỉ local
-// Mặc định: '0.0.0.0' cho production, 'localhost' cho development
-const host = process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost');
+// Mặc định: '0.0.0.0' cho production hoặc khi deploy trên Railway/Render
+const host = process.env.HOST || (process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT || process.env.RENDER ? '0.0.0.0' : 'localhost');
 
 const startServer = async () => {
   const isConnected = await testConnection();

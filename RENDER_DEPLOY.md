@@ -1,14 +1,64 @@
 # 🚀 Hướng dẫn Deploy lên Render.com
 
-## 📋 Bước 1: Tạo Database trên Render
+## ⚠️ QUAN TRỌNG: Render không có MySQL!
+
+**Render chỉ cung cấp PostgreSQL trong free tier**, không có MySQL. Bạn có 3 lựa chọn:
+
+### Lựa chọn 1: Dùng MySQL từ dịch vụ khác (Khuyến nghị - Dễ nhất)
+
+Sử dụng MySQL từ các dịch vụ sau (miễn phí):
+
+#### Option A: Railway.app (Có MySQL miễn phí)
+1. Đăng ký tại [Railway.app](https://railway.app)
+2. Tạo project mới → **"New"** → **"Database"** → **"MySQL"**
+3. Railway sẽ tự động tạo MySQL database
+4. Copy **DATABASE_URL** từ Railway
+5. Dùng URL này trong Render Environment Variables
+
+#### Option B: PlanetScale (MySQL miễn phí)
+1. Đăng ký tại [PlanetScale.com](https://planetscale.com)
+2. Tạo database mới
+3. Lấy connection string
+4. Dùng trong Render
+
+#### Option C: Free MySQL Hosting khác
+- [Aiven](https://aiven.io) - Có free tier
+- [Clever Cloud](https://www.clever-cloud.com) - Có MySQL free tier
+
+### Lựa chọn 2: Dùng PostgreSQL trên Render (Cần convert code)
+
+Nếu muốn dùng PostgreSQL (có sẵn trên Render):
 
 1. Đăng nhập vào [Render Dashboard](https://dashboard.render.com)
-2. Click **"New +"** → **"PostgreSQL"** hoặc **"MySQL"**
-3. Chọn **"MySQL"** (nếu có) hoặc dùng PostgreSQL và điều chỉnh code
-4. Đặt tên database: `valorant-db`
-5. Chọn plan (Free tier có sẵn)
-6. Click **"Create Database"**
-7. **Lưu ý**: Render sẽ cung cấp:
+2. Click **"New +"** → **"PostgreSQL"**
+3. Đặt tên database: `valorant-db`
+4. Chọn plan (Free tier có sẵn)
+5. Click **"Create Database"**
+6. **Lưu ý**: Cần convert code từ MySQL sang PostgreSQL (xem phần dưới)
+
+### Lựa chọn 3: Dùng MySQL từ máy local (Chỉ để test)
+
+Không khuyến nghị cho production, nhưng có thể dùng để test.
+
+---
+
+## 📋 Bước 1: Tạo Database
+
+### Nếu dùng MySQL từ Railway/PlanetScale:
+
+1. Tạo MySQL database trên Railway hoặc PlanetScale
+2. Copy **DATABASE_URL** hoặc connection string
+3. Format: `mysql://user:password@host:port/database`
+4. Lưu lại để dùng trong Bước 3
+
+### Nếu dùng PostgreSQL trên Render:
+
+1. Đăng nhập vào [Render Dashboard](https://dashboard.render.com)
+2. Click **"New +"** → **"PostgreSQL"**
+3. Đặt tên database: `valorant-db`
+4. Chọn plan (Free tier có sẵn)
+5. Click **"Create Database"**
+6. Render sẽ cung cấp:
    - **Internal Database URL** (dùng cho app trên cùng network)
    - **External Database URL** (dùng cho app khác network)
 

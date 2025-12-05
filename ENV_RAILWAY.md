@@ -19,8 +19,10 @@ SESSION_SECRET=your_generated_secret_here
 PORT=3000
 NODE_ENV=development
 
-# Ngrok (không cần khi dùng Railway)
-ENABLE_NGROK=false
+# Server Configuration
+HOST=0.0.0.0
+PORT=3000
+NODE_ENV=development
 ```
 
 ### Option 2: Sử dụng các biến riêng lẻ
@@ -43,8 +45,10 @@ SESSION_SECRET=your_generated_secret_here
 PORT=3000
 NODE_ENV=development
 
-# Ngrok
-ENABLE_NGROK=false
+# Server Configuration
+HOST=0.0.0.0
+PORT=3000
+NODE_ENV=development
 ```
 
 ## Lưu ý quan trọng

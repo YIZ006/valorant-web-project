@@ -20,9 +20,9 @@ if (!databaseUrl) {
   console.log('Cách 2: Tự cập nhật file .env với nội dung sau:\n');
   console.log('DATABASE_URL=mysql://root:YOUR_PASSWORD@switchback.proxy.rlwy.net:13403/railway');
   console.log('SESSION_SECRET=' + crypto.randomBytes(32).toString('hex'));
+  console.log('HOST=0.0.0.0');
   console.log('NODE_ENV=development');
-  console.log('PORT=3000');
-  console.log('ENABLE_NGROK=false\n');
+  console.log('PORT=3000\n');
   process.exit(0);
 }
 
@@ -53,13 +53,8 @@ SESSION_SECRET=${sessionSecret}
 # 🚀 SERVER CONFIGURATION
 # ==========================
 PORT=3000
+HOST=0.0.0.0
 NODE_ENV=development
-
-# ==========================
-# 🌐 NGROK CONFIGURATION (Không cần khi dùng Railway)
-# ==========================
-ENABLE_NGROK=false
-NGROK_AUTH_TOKEN=
 `;
 
 // Đường dẫn file .env

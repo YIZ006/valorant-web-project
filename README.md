@@ -7,7 +7,7 @@ Một hệ thống wiki về Valorant được xây dựng với Node.js, Expres
 - 📖 **Wiki System**: Hiển thị và chỉnh sửa nội dung wiki về Valorant
 - 🔐 **Authentication**: Hệ thống đăng nhập/đăng ký cho admin
 - 📝 **Edit History**: Lưu lịch sử chỉnh sửa (revisions)
-- 🌐 **Public Access**: Hỗ trợ ngrok để truy cập từ internet
+- 🌐 **Public Access**: Hỗ trợ truy cập từ internet qua Railway/Render
 - 🎨 **Responsive UI**: Giao diện đẹp, responsive
 - 🔄 **REST API**: API endpoints cho Agents, Maps, Roles
 
@@ -65,10 +65,8 @@ SESSION_SECRET=your_generated_secret_here
 
 # Server Configuration
 PORT=3000
-
-# Ngrok Configuration (tùy chọn)
-ENABLE_NGROK=false
-NGROK_AUTH_TOKEN=your_ngrok_token_here
+HOST=0.0.0.0
+NODE_ENV=development
 ```
 
 2. Tạo SESSION_SECRET:
@@ -105,18 +103,11 @@ Server sẽ chạy tại: `http://localhost:3000`
 - **Maps**: `GET http://localhost:3000/api/maps`
 - **Roles**: `GET http://localhost:3000/api/roles`
 
-## 🌐 Sử dụng Ngrok (Truy cập từ Internet)
+## 🌐 Truy cập Public (Từ Internet)
 
-Để chia sẻ server với người khác qua internet:
+Để truy cập từ internet, deploy lên Railway hoặc Render (xem phần Deploy bên dưới).
 
-1. Đăng ký tài khoản tại [ngrok.com](https://ngrok.com)
-2. Lấy Auth Token tại [dashboard.ngrok.com](https://dashboard.ngrok.com/get-started/your-authtoken)
-3. Cập nhật file `.env`:
-   ```env
-   ENABLE_NGROK=true
-   NGROK_AUTH_TOKEN=your_token_here
-   ```
-4. Khởi động lại server - URL public sẽ hiển thị trong console
+Hoặc nếu chạy local, set `HOST=0.0.0.0` trong file `.env` để cho phép truy cập từ mạng LAN.
 
 ## 📁 Cấu trúc Project
 
@@ -153,7 +144,7 @@ valorant_prj/
 - **Database**: MySQL
 - **Template Engine**: EJS
 - **Authentication**: Express Session, bcrypt
-- **Tunneling**: Ngrok
+- **Deployment**: Railway, Render
 
 ## 📝 Scripts
 

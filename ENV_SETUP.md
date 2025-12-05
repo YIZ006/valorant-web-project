@@ -22,38 +22,9 @@ SESSION_SECRET=mySecretKey123
 # 🚀 SERVER CONFIGURATION
 # ==========================
 PORT=3000
-
-# ==========================
-# 🌐 NGROK CONFIGURATION
-# ==========================
-# Đặt ENABLE_NGROK=true để kích hoạt ngrok
-# Lấy NGROK_AUTH_TOKEN tại: https://dashboard.ngrok.com/get-started/your-authtoken
-ENABLE_NGROK=false
-NGROK_AUTH_TOKEN=your_ngrok_auth_token_here
+HOST=0.0.0.0
+NODE_ENV=development
 ```
-
-## Cách lấy Ngrok Auth Token
-
-1. Đăng ký tài khoản miễn phí tại: https://ngrok.com
-2. Đăng nhập vào dashboard: https://dashboard.ngrok.com
-3. Vào phần **"Your Authtoken"** hoặc **"Get Started"**
-4. Copy token của bạn
-5. Paste vào file `.env` tại `NGROK_AUTH_TOKEN`
-
-## Kích hoạt Ngrok
-
-Để sử dụng ngrok, thay đổi trong file `.env`:
-```env
-ENABLE_NGROK=true
-NGROK_AUTH_TOKEN=your_actual_token_here
-```
-
-Sau đó khởi động lại server:
-```bash
-npm start
-```
-
-Bạn sẽ thấy URL public ngrok trong console!
 
 ## 🔐 Tạo SESSION_SECRET
 
@@ -84,7 +55,7 @@ SESSION_SECRET=mySecretKey123
 ## Lưu ý bảo mật
 
 - **KHÔNG** commit file `.env` vào git (đã có trong `.gitignore`)
-- **KHÔNG** chia sẻ token ngrok với người khác
 - **KHÔNG** chia sẻ `SESSION_SECRET` với ai
 - Thay đổi `SESSION_SECRET` bằng một chuỗi ngẫu nhiên mạnh (dùng `generate-secret.js`)
+- Để truy cập từ internet, deploy lên Railway hoặc Render (xem [RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md))
 

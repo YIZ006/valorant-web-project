@@ -45,10 +45,6 @@ PORT=3000
 - Railway tự động set PORT, nhưng có thể để PORT=3000 để đảm bảo
 - Nếu không set HOST, mặc định sẽ là `0.0.0.0` cho production
 
-### Ngrok (Không cần trên Railway)
-```
-ENABLE_NGROK=false
-```
 
 ## 📋 Bước 4: Cấu hình Build & Start Commands
 

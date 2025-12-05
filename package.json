@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "migrate": "node scripts/migrate.js",
     "migrate-safe": "node scripts/migrate-safe.js",
+    "fix-fk": "node scripts/fix-foreign-keys.js",
     "test-db": "node scripts/test-connection.js",
     "setup-railway": "node scripts/setup-railway-env.js"
   },

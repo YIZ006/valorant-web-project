@@ -69,6 +69,31 @@ async function runMigration() {
     let skipCount = 0;
     let errorCount = 0;
 
+    // Xóa foreign keys cũ nếu tồn tại (để tránh duplicate constraint)
+    const dropConstraints = [
+      "ALTER TABLE Abilities DROP FOREIGN KEY IF EXISTS Abilities_ibfk_1",
+      "ALTER TABLE Weapon_Damage DROP FOREIGN KEY IF EXISTS Weapon_Damage_ibfk_1",
+      "ALTER TABLE Team_Compositions DROP FOREIGN KEY IF EXISTS Team_Compositions_ibfk_1",
+      "ALTER TABLE Composition_Agents DROP FOREIGN KEY IF EXISTS Composition_Agents_ibfk_1",
+      "ALTER TABLE Composition_Agents DROP FOREIGN KEY IF EXISTS Composition_Agents_ibfk_2",
+      "ALTER TABLE Revisions DROP FOREIGN KEY IF EXISTS Revisions_ibfk_1",
+      "ALTER TABLE Agents DROP FOREIGN KEY IF EXISTS fk_agents_role",
+      "ALTER TABLE Guides DROP FOREIGN KEY IF EXISTS fk_guides_map",
+      "ALTER TABLE Guides DROP FOREIGN KEY IF EXISTS fk_guides_agent"
+    ];
+
+    console.log("🔧 Đang xóa foreign keys cũ (nếu có)...");
+    for (const dropSql of dropConstraints) {
+      try {
+        await connection.query(dropSql);
+      } catch (error) {
+        // Bỏ qua lỗi nếu constraint không tồn tại
+        if (!error.message.includes("doesn't exist") && !error.message.includes("Unknown key")) {
+          // Chỉ log nếu không phải lỗi "không tồn tại"
+        }
+      }
+    }
+
     for (const statement of statements) {
       if (statement.trim()) {
         try {
@@ -79,9 +104,11 @@ async function runMigration() {
           if (error.code === 'ER_TABLE_EXISTS_ERROR' || 
               error.code === 'ER_DUP_KEYNAME' ||
               error.code === 'ER_DUP_FIELDNAME' ||
-              error.message.includes('already exists')) {
+              error.code === 'ER_DUP_ENTRY' ||
+              error.message.includes('already exists') ||
+              error.message.includes('Duplicate foreign key')) {
             skipCount++;
-            console.log(`   ⏭️  Bỏ qua: ${error.message.substring(0, 50)}...`);
+            console.log(`   ⏭️  Bỏ qua: ${error.message.substring(0, 60)}...`);
           } else {
             errorCount++;
             console.error(`   ❌ Lỗi: ${error.message}`);

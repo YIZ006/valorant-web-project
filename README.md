@@ -163,29 +163,35 @@ npm run migrate    # Chạy database migration
 node generate-secret.js  # Tạo SESSION_SECRET ngẫu nhiên
 ```
 
-## 🚀 Deploy lên Render.com
+## 🚀 Deploy
 
-Xem file [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) để biết hướng dẫn chi tiết về cách deploy lên Render.
+### Option 1: Deploy lên Railway.com (Khuyến nghị - Dễ nhất)
 
-### Tóm tắt nhanh:
+Railway hỗ trợ cả MySQL và Web Service trên cùng platform!
 
-1. **Tạo MySQL Database** trên Render Dashboard
-2. **Tạo Web Service** và connect GitHub repository
-3. **Cấu hình Environment Variables**:
-   - `DATABASE_URL` hoặc các biến `DB_*`
-   - `SESSION_SECRET` (tạo bằng `node generate-secret.js`)
-   - `NODE_ENV=production`
-   - `PORT=10000` (Render tự động set, nhưng có thể để để đảm bảo)
-4. **Chạy migration**: Sử dụng Render Shell hoặc script `npm run migrate`
-5. **Deploy và kiểm tra logs**
+Xem file [RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md) để biết hướng dẫn chi tiết.
 
-### Environment Variables cần thiết trên Render:
+**Tóm tắt nhanh:**
+1. Tạo **MySQL Database** trên Railway
+2. Tạo **Web Service** và connect GitHub repository
+3. Railway tự động tạo biến `DATABASE_URL` từ MySQL
+4. Thêm `SESSION_SECRET` và `NODE_ENV=production`
+5. Chạy migration: `npm run migrate` trong Railway Shell
+6. Deploy tự động khi push code lên GitHub
+
+### Option 2: Deploy lên Render.com
+
+Xem file [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) để biết hướng dẫn chi tiết.
+
+**Lưu ý**: Render không có MySQL trong free tier, cần dùng MySQL từ Railway hoặc dịch vụ khác.
+
+### Environment Variables cần thiết:
 
 ```
 DATABASE_URL=mysql://user:password@host:port/database
 SESSION_SECRET=your_random_secret_here
 NODE_ENV=production
-PORT=10000
+PORT=3000
 ```
 
 ## 🔒 Bảo mật

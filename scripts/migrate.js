@@ -88,10 +88,12 @@ async function runMigration() {
         try {
           await connection.query(statement);
         } catch (error) {
-          // Bỏ qua lỗi duplicate constraint hoặc table exists
+          // Bỏ qua lỗi duplicate constraint, table exists, hoặc duplicate entry
           if (error.message.includes('Duplicate foreign key') || 
               error.message.includes('already exists') ||
-              error.code === 'ER_DUP_KEYNAME') {
+              error.message.includes('Duplicate entry') ||
+              error.code === 'ER_DUP_KEYNAME' ||
+              error.code === 'ER_DUP_ENTRY') {
             console.log(`   ⏭️  Bỏ qua: ${error.message.substring(0, 60)}...`);
           } else {
             throw error; // Throw các lỗi khác

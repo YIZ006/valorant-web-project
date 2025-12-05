@@ -141,24 +141,24 @@ MODIFY `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 ALTER TABLE admin ADD UNIQUE (username);
 INSERT INTO weapons (weapon_id, weapon_name, weapon_category, cost, magazine_size, wall_penetration) VALUES
-(1, 'Classic', 'Sidearm', 0, 12, 'Low'),
-(2, 'Shorty', 'Sidearm', 150, 2, 'Low'),
-(3, 'Frenzy', 'Sidearm', 450, 13, 'Low'),
-(4, 'Ghost', 'Sidearm', 500, 15, 'Medium'),
-(5, 'Sheriff', 'Sidearm', 800, 6, 'High'),
-(6, 'Stinger', 'SMG', 950, 20, 'Low'),
-(7, 'Spectre', 'SMG', 1600, 30, 'Medium'),
-(8, 'Bucky', 'Shotgun', 850, 5, 'Low'),
-(9, 'Judge', 'Shotgun', 1850, 7, 'Medium'),
-(10, 'Bulldog', 'Rifle', 2050, 24, 'Medium'),
-(11, 'Guardian', 'Rifle', 2250, 12, 'High'),
-(12, 'Phantom', 'Rifle', 2900, 30, 'Medium'),
-(13, 'Vandal', 'Rifle', 2900, 25, 'Medium'),
-(14, 'Marshal', 'Sniper', 950, 5, 'Medium'),
-(15, 'Operator', 'Sniper', 4700, 5, 'High'),
-(16, 'Outlaw', 'Sniper', 2400, 2, 'High'),
-(17, 'Ares', 'Heavy', 1600, 50, 'High'),
-(18, 'Odin', 'Heavy', 3200, 100, 'High');
+(1, 'Classic', 'Sidearms', 0, 12, 'Low'),
+(2, 'Shorty', 'Sidearms', 150, 2, 'Low'),
+(3, 'Frenzy', 'Sidearms', 450, 13, 'Low'),
+(4, 'Ghost', 'Sidearms', 500, 15, 'Medium'),
+(5, 'Sheriff', 'Sidearms', 800, 6, 'High'),
+(6, 'Stinger', 'SMGs', 950, 20, 'Low'),
+(7, 'Spectre', 'SMGs', 1600, 30, 'Medium'),
+(8, 'Bucky', 'Shotguns', 850, 5, 'Low'),
+(9, 'Judge', 'Shotguns', 1850, 7, 'Medium'),
+(10, 'Bulldog', 'Rifles', 2050, 24, 'Medium'),
+(11, 'Guardian', 'Rifles', 2250, 12, 'High'),
+(12, 'Phantom', 'Rifles', 2900, 30, 'Medium'),
+(13, 'Vandal', 'Rifles', 2900, 25, 'Medium'),
+(14, 'Marshal', 'Sniper Rifles', 950, 5, 'Medium'),
+(15, 'Operator', 'Sniper Rifles', 4700, 5, 'High'),
+(16, 'Outlaw', 'Sniper Rifles', 2400, 2, 'High'),
+(17, 'Ares', 'Machine Guns', 1600, 50, 'High'),
+(18, 'Odin', 'Machine Guns', 3200, 100, 'High');
 
 INSERT INTO weapon_damage (weapon_id, range_start, range_end, head_damage, body_damage, leg_damage) VALUES
 -- Sidearms

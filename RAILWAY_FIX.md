@@ -26,6 +26,17 @@ Server không thể khởi động → 502 Bad Gateway
 3. Tìm biến **`MYSQL_URL`**
 4. Copy giá trị (ví dụ: `mysql://root:password@mysql.railway.internal:3306/railway`)
 
+**⚠️ QUAN TRỌNG:** 
+- ✅ **Dùng Internal URL**: `mysql://root:password@mysql.railway.internal:3306/valorant`
+  - Host: `mysql.railway.internal`
+  - Port: `3306`
+  - Nhanh, không timeout, miễn phí bandwidth
+  
+- ❌ **KHÔNG dùng Public URL**: `mysql://root:password@ballast.proxy.rlwy.net:43862/valorant`
+  - Host: `ballast.proxy.rlwy.net` hoặc `*.proxy.rlwy.net`
+  - Port: `43862` (hoặc port khác)
+  - Có thể bị timeout, chậm, tốn bandwidth
+
 ### Bước 3: Thêm MYSQL_URL vào Web Service
 
 1. Click vào **Web Service** (valorant-web-project)

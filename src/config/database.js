@@ -8,12 +8,14 @@ if (process.env.DATABASE_URL) {
   // Parse DATABASE_URL (format: mysql://user:password@host:port/database)
   try {
     const url = new URL(process.env.DATABASE_URL);
+    // Lấy database name từ URL, nếu không có thì dùng 'railway' (Railway default)
+    const dbNameFromUrl = url.pathname.slice(1); // Remove leading '/'
     dbConfig = {
       host: url.hostname,
       port: parseInt(url.port) || 3306,
       user: url.username,
       password: url.password,
-      database: url.pathname.slice(1) || 'railway', // Remove leading '/' và default là 'railway'
+      database: dbNameFromUrl || 'railway', // Railway mặc định tên database là 'railway'
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
@@ -29,11 +31,11 @@ if (process.env.DATABASE_URL) {
 } else {
   // Cấu hình database từ environment variables riêng lẻ
   dbConfig = {
-    host: process.env.DB_HOST || "switchback.proxy.rlwy.net",
-    port: parseInt(process.env.DB_PORT) || 13403,
+    host: process.env.DB_HOST || "localhost",
+    port: parseInt(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "ABFdhiYltiCKWshVGDcBAbxWsBMQGTcz",
-    database: process.env.DB_NAME || process.env.DB_DATABASE || "valorant",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || process.env.DB_DATABASE || "railway",
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,

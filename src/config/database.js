@@ -8,16 +8,24 @@ let dbConfig;
 if (process.env.MYSQL_URL) {
   // Railway tự động tạo MYSQL_URL với Internal URL
   try {
+    // Clean URL: loại bỏ khoảng trắng và dấu = ở đầu (nếu có)
+    let mysqlUrl = process.env.MYSQL_URL.trim();
+    // Loại bỏ dấu = ở đầu nếu có (Railway có thể thêm vào)
+    if (mysqlUrl.startsWith('=')) {
+      mysqlUrl = mysqlUrl.substring(1).trim();
+      console.log("⚠️  Đã loại bỏ dấu '=' ở đầu MYSQL_URL");
+    }
+    
     // Log để debug (ẩn password)
-    const mysqlUrlForLog = process.env.MYSQL_URL.replace(/:[^:@]+@/, ':****@');
+    const mysqlUrlForLog = mysqlUrl.replace(/:[^:@]+@/, ':****@');
     console.log(`🔍 Đang parse MYSQL_URL: ${mysqlUrlForLog.substring(0, 50)}...`);
     
     // Kiểm tra format URL
-    if (!process.env.MYSQL_URL.startsWith('mysql://')) {
+    if (!mysqlUrl.startsWith('mysql://')) {
       throw new Error(`MYSQL_URL phải bắt đầu bằng 'mysql://'. Giá trị hiện tại: ${mysqlUrlForLog.substring(0, 100)}`);
     }
     
-    const url = new URL(process.env.MYSQL_URL);
+    const url = new URL(mysqlUrl);
     const dbNameFromUrl = url.pathname.slice(1);
     
     // Validate các thành phần cần thiết
@@ -57,16 +65,24 @@ if (process.env.MYSQL_URL) {
 } else if (process.env.DATABASE_URL) {
   // Parse DATABASE_URL (format: mysql://user:password@host:port/database)
   try {
+    // Clean URL: loại bỏ khoảng trắng và dấu = ở đầu (nếu có)
+    let databaseUrl = process.env.DATABASE_URL.trim();
+    // Loại bỏ dấu = ở đầu nếu có (Railway có thể thêm vào)
+    if (databaseUrl.startsWith('=')) {
+      databaseUrl = databaseUrl.substring(1).trim();
+      console.log("⚠️  Đã loại bỏ dấu '=' ở đầu DATABASE_URL");
+    }
+    
     // Log để debug (ẩn password)
-    const dbUrlForLog = process.env.DATABASE_URL.replace(/:[^:@]+@/, ':****@');
+    const dbUrlForLog = databaseUrl.replace(/:[^:@]+@/, ':****@');
     console.log(`🔍 Đang parse DATABASE_URL: ${dbUrlForLog.substring(0, 50)}...`);
     
     // Kiểm tra format URL
-    if (!process.env.DATABASE_URL.startsWith('mysql://')) {
+    if (!databaseUrl.startsWith('mysql://')) {
       throw new Error(`DATABASE_URL phải bắt đầu bằng 'mysql://'. Giá trị hiện tại: ${dbUrlForLog.substring(0, 100)}`);
     }
     
-    const url = new URL(process.env.DATABASE_URL);
+    const url = new URL(databaseUrl);
     // Lấy database name từ URL, nếu không có thì dùng 'railway' (Railway default)
     const dbNameFromUrl = url.pathname.slice(1); // Remove leading '/'
     

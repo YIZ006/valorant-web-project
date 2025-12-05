@@ -41,28 +41,34 @@ async function runMigration() {
 
     // Xóa foreign keys cũ trước khi chạy migration
     console.log("🔧 Đang xóa foreign keys cũ (nếu có)...");
-    const dropConstraints = [
-      "ALTER TABLE Abilities DROP FOREIGN KEY Abilities_ibfk_1",
-      "ALTER TABLE Weapon_Damage DROP FOREIGN KEY Weapon_Damage_ibfk_1",
-      "ALTER TABLE Team_Compositions DROP FOREIGN KEY Team_Compositions_ibfk_1",
-      "ALTER TABLE Composition_Agents DROP FOREIGN KEY Composition_Agents_ibfk_1",
-      "ALTER TABLE Composition_Agents DROP FOREIGN KEY Composition_Agents_ibfk_2",
-      "ALTER TABLE Revisions DROP FOREIGN KEY Revisions_ibfk_1",
-      "ALTER TABLE Agents DROP FOREIGN KEY fk_agents_role",
-      "ALTER TABLE Guides DROP FOREIGN KEY fk_guides_map",
-      "ALTER TABLE Guides DROP FOREIGN KEY fk_guides_agent"
-    ];
+    
+    // Lấy danh sách foreign keys hiện có từ information_schema
+    try {
+      const [constraints] = await connection.query(`
+        SELECT 
+          TABLE_NAME,
+          CONSTRAINT_NAME
+        FROM 
+          information_schema.TABLE_CONSTRAINTS
+        WHERE 
+          CONSTRAINT_TYPE = 'FOREIGN KEY'
+          AND TABLE_SCHEMA = ?
+      `, [dbConfig.database]);
 
-    for (const dropSql of dropConstraints) {
-      try {
-        await connection.query(dropSql);
-        console.log(`   ✅ Đã xóa: ${dropSql.split(' ')[2]}`);
-      } catch (error) {
-        // Bỏ qua lỗi nếu constraint không tồn tại
-        if (!error.message.includes("doesn't exist") && !error.message.includes("Unknown key")) {
-          // Chỉ log nếu không phải lỗi "không tồn tại"
+      for (const constraint of constraints) {
+        try {
+          const dropSql = `ALTER TABLE \`${constraint.TABLE_NAME}\` DROP FOREIGN KEY \`${constraint.CONSTRAINT_NAME}\``;
+          await connection.query(dropSql);
+          console.log(`   ✅ Đã xóa: ${constraint.TABLE_NAME}.${constraint.CONSTRAINT_NAME}`);
+        } catch (error) {
+          // Bỏ qua lỗi nếu constraint không tồn tại
+          if (!error.message.includes("doesn't exist") && !error.message.includes("Unknown key")) {
+            console.log(`   ⚠️  Không thể xóa ${constraint.CONSTRAINT_NAME}: ${error.message}`);
+          }
         }
       }
+    } catch (error) {
+      console.log(`   ⚠️  Không thể lấy danh sách constraints: ${error.message}`);
     }
 
     // Đọc file migration

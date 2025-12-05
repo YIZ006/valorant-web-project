@@ -112,70 +112,8 @@ CREATE TABLE IF NOT EXISTS Revisions (
     FOREIGN KEY (page_id) REFERENCES Pages(page_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Xóa foreign keys cũ nếu tồn tại trước khi tạo mới
-SET @dbname = DATABASE();
-SET @tablename = "Abilities";
-SET @constraintname = "Abilities_ibfk_1";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-SET @tablename = "Weapon_Damage";
-SET @constraintname = "Weapon_Damage_ibfk_1";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-SET @tablename = "Team_Compositions";
-SET @constraintname = "Team_Compositions_ibfk_1";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE PREPARE stmt;
-
-SET @tablename = "Composition_Agents";
-SET @constraintname = "Composition_Agents_ibfk_1";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-SET @constraintname = "Composition_Agents_ibfk_2";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-SET @tablename = "Revisions";
-SET @constraintname = "Revisions_ibfk_1";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-SET @tablename = "Agents";
-SET @constraintname = "fk_agents_role";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-SET @tablename = "Guides";
-SET @constraintname = "fk_guides_map";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-SET @constraintname = "fk_guides_agent";
-SET @sql = CONCAT("ALTER TABLE ", @tablename, " DROP FOREIGN KEY IF EXISTS ", @constraintname);
-PREPARE stmt FROM @sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
--- Tạo lại foreign keys với CASCADE
+-- Foreign keys sẽ được tạo ở phần ALTER TABLE bên dưới
+-- Script migrate.js sẽ tự động xóa foreign keys cũ trước khi chạy migration này
 ALTER TABLE
     Agents ADD CONSTRAINT fk_agents_role FOREIGN KEY(role_id) REFERENCES Roles(role_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE

@@ -22,15 +22,12 @@ Railway tự động tạo biến môi trường khi có database trong cùng pr
      - Value: `mysql://root:password@host:port/railway`
 
 ## 📋 Bước 3: Cấu hình Environment Variables
-
 Vào Web Service → Tab **"Variables"**, thêm các biến sau:
-
 ### Database (Đã tự động nếu MySQL trong cùng project)
 ```
 DATABASE_URL=mysql://root:password@host:port/railway
 ```
 Railway tự động tạo biến này nếu MySQL và Web Service trong cùng project.
-
 ### Session Secret
 ```
 SESSION_SECRET=your_random_secret_here
@@ -184,8 +181,4 @@ Host: host:port
 - [Railway Documentation](https://docs.railway.app)
 - [Railway Discord](https://discord.gg/railway)
 - [Railway Status](https://status.railway.app)
-
----
-
-Chúc bạn deploy thành công trên Railway! 🎉
 

@@ -6,30 +6,41 @@ let dbConfig;
 
 if (process.env.DATABASE_URL) {
   // Parse DATABASE_URL (format: mysql://user:password@host:port/database)
-  const url = new URL(process.env.DATABASE_URL);
-  dbConfig = {
-    host: url.hostname,
-    port: url.port || 3306,
-    user: url.username,
-    password: url.password,
-    database: url.pathname.slice(1), // Remove leading '/'
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
-  };
+  try {
+    const url = new URL(process.env.DATABASE_URL);
+    dbConfig = {
+      host: url.hostname,
+      port: parseInt(url.port) || 3306,
+      user: url.username,
+      password: url.password,
+      database: url.pathname.slice(1) || 'railway', // Remove leading '/' và default là 'railway'
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+      // Railway thường yêu cầu SSL cho public connections
+      ssl: process.env.DB_SSL === 'true' || url.hostname.includes('.rlwy.net') 
+        ? { rejectUnauthorized: false } 
+        : false,
+    };
+  } catch (error) {
+    console.error("❌ Lỗi parse DATABASE_URL:", error.message);
+    throw error;
+  }
 } else {
   // Cấu hình database từ environment variables riêng lẻ
   dbConfig = {
     host: process.env.DB_HOST || "localhost",
-    port: process.env.DB_PORT || 3306,
+    port: parseInt(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "valorant",
+    database: process.env.DB_NAME || process.env.DB_DATABASE || "valorant",
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    // Railway thường yêu cầu SSL
+    ssl: process.env.DB_SSL === 'true' || (process.env.DB_HOST && process.env.DB_HOST.includes('.rlwy.net'))
+      ? { rejectUnauthorized: false }
+      : false,
   };
 }
 

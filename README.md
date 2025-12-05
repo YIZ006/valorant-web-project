@@ -159,7 +159,33 @@ valorant_prj/
 
 ```bash
 npm start          # Chạy server
+npm run migrate    # Chạy database migration
 node generate-secret.js  # Tạo SESSION_SECRET ngẫu nhiên
+```
+
+## 🚀 Deploy lên Render.com
+
+Xem file [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) để biết hướng dẫn chi tiết về cách deploy lên Render.
+
+### Tóm tắt nhanh:
+
+1. **Tạo MySQL Database** trên Render Dashboard
+2. **Tạo Web Service** và connect GitHub repository
+3. **Cấu hình Environment Variables**:
+   - `DATABASE_URL` hoặc các biến `DB_*`
+   - `SESSION_SECRET` (tạo bằng `node generate-secret.js`)
+   - `NODE_ENV=production`
+   - `PORT=10000` (Render tự động set, nhưng có thể để để đảm bảo)
+4. **Chạy migration**: Sử dụng Render Shell hoặc script `npm run migrate`
+5. **Deploy và kiểm tra logs**
+
+### Environment Variables cần thiết trên Render:
+
+```
+DATABASE_URL=mysql://user:password@host:port/database
+SESSION_SECRET=your_random_secret_here
+NODE_ENV=production
+PORT=10000
 ```
 
 ## 🔒 Bảo mật
